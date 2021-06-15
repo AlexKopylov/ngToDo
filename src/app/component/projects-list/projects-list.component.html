@@ -1,36 +1,74 @@
-<p>project-list</p>
+<!--<p>project-list</p>-->
 
-<!--<div class="list row">-->
-<!--  <div class="">-->
-<!--    <div class="input-group">-->
-<!--      <input-->
-<!--        type="text"-->
-<!--        class=""-->
-<!--        placeholder="Search by title"-->
-<!--        ngModel="title"-->
-<!--      >-->
+<div class="list row">
+  <div class="col-md-8">
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by title"
+        ngModel="title"
+      >
 
-<!--      <div class="">-->
-<!--&lt;!&ndash;        <button&ndash;&gt;-->
-<!--&lt;!&ndash;          class=""&ndash;&gt;-->
-<!--&lt;!&ndash;          type="button"&ndash;&gt;-->
-<!--&lt;!&ndash;          (click)="searchTitle()"&ndash;&gt;-->
-<!--&lt;!&ndash;        >&ndash;&gt;-->
-<!--&lt;!&ndash;          Search&ndash;&gt;-->
-<!--&lt;!&ndash;        </button>&ndash;&gt;-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          (click)="searchTitle()"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
 
-<!--  <div class="">-->
-<!--    <h4>Todo list</h4>-->
-<!--    <ul>-->
-<!--&lt;!&ndash;      <li&ndash;&gt;-->
-<!--&lt;!&ndash;        class=""&ndash;&gt;-->
-<!--&lt;!&ndash;        *ngFor="let todo of todos; let i = index"&ndash;&gt;-->
-<!--&lt;!&ndash;      >&ndash;&gt;-->
-<!--&lt;!&ndash;        {{todo.title}}&ndash;&gt;-->
-<!--&lt;!&ndash;      </li>&ndash;&gt;-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</div>-->
+  <div class="col-md-6">
+    <h4>Todos list</h4>
+    <ul class="list-group">
+      <li
+        class="list-group-item"
+        *ngFor="let todo of todos; let i = index"
+        [class.active]="i == currentIndex"
+        (click)="setActiveTodo(todo, i)"
+      >
+        {{todo.title}}
+      </li>
+    </ul>
+
+    <button
+      class="m-3 btn btn-sm btn-danger"
+      (click)="removeAllTodos()"
+    >
+      Remove All
+    </button>
+  </div>
+
+  <div class="col-md-6">
+    <div *ngIf="currentTodo">
+      <h4>Todos</h4>
+      <div>
+        <label><strong>Title:</strong>{{currentTodo.title}}</label>
+      </div>
+
+      <div>
+        <label><strong>Description:</strong></label>{{currentTodo.description}}
+      </div>
+
+      <div>
+        <label><strong>Status:</strong></label> {{currentTodo.published ? "Published" : "Pending"}}
+      </div>
+
+      <a
+        class="badge badge-warning"
+        routerLink="/projects/{{currentTodo.id}}"
+      >
+        Edit
+      </a>
+    </div>
+
+    <div *ngIf="!currentTodo">
+      <br>
+      <p>Please click on a todo...</p>
+    </div>
+  </div>
+</div>

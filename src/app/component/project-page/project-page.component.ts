@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TodoService} from '../../services/todo.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-project-page',
@@ -8,57 +9,65 @@ import {TodoService} from '../../services/todo.service';
 })
 export class ProjectPageComponent implements OnInit {
 
-  todo: any;
   currentTodo = null;
-  currentIndex = -1;
-  title = '';
+  message = '';
 
-  constructor(private todoService: TodoService) {
+  constructor(
+    private todoService: TodoService,
+    private route: ActivatedRoute,
+    private router: Router) {
   }
 
   ngOnInit(): void {
-    this.retrieveTodo();
+    this.message = '';
+    this.getTodo(this.route.snapshot.paramMap.get('id'));
   }
 
-  retrieveTodo(): void {
-    this.todoService.getAll().subscribe(
-      data => {
-        this.todo = data;
-        console.log(data);
-      }, error => {
-        console.log(error);
-      });
+  getTodo(id): void {
+    this.todoService.get(id)
+      .subscribe(
+        data => {
+          this.currentTodo = data;
+          console.log(data);
+        }, error => console.log(error)
+      );
   }
 
-  refreshList(): void {
-    this.retrieveTodo();
-    this.currentTodo = null;
-    this.currentIndex = -1;
+  updatePublished(status): void {
+    const data = {
+      title: this.currentTodo.title,
+      declarations: this.currentTodo.description,
+      published: status
+    };
+
+    this.todoService.update(this.currentTodo.id, data)
+      .subscribe(
+        response => {
+          this.currentTodo.published = status;
+          console.log(response);
+        }, error => console.log(error)
+      );
   }
 
-  setActiveTodo(todo, index): void {
-    this.currentTodo = todo;
-    this.currentIndex = index;
+  updateTodos(): void {
+    this.todoService.update(this.currentTodo.id, this.currentTodo)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.message = 'The todo was updated successfully';
+        }, error => console.log(error)
+      );
   }
 
-  removeAllTodo(): void {
-    this.todoService.deleteAll()
-      .subscribe(res => {
-        console.log(res);
-        this.retrieveTodo();
-      }, error => {
-        console.log(error);
-      });
+  deleteTodo(): void {
+    this.todoService.delete(this.currentTodo.id)
+      .subscribe(
+        resp => {
+          console.log(resp);
+          this.router.navigate(['/projects']);
+        }, error => console.log(error)
+      );
   }
 
-  searchTitle(): void {
-    this.todoService.findByTitle(this.title)
-      .subscribe(data => {
-        this.todo = data;
-        console.log(data);
-      }, error => {
-        console.log(error);
-      });
-  }
 
 }

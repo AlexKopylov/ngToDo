@@ -5,7 +5,7 @@ import {ProjectPageComponent} from './component/project-page/project-page.compon
 import {ProjectTodoComponent} from './component/project-todo/project-todo.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/', pathMatch: 'full'},
+  {path: '', redirectTo: 'projects', pathMatch: 'full'},
   {path: 'projects', component: ProjectsListComponent},
   {path: 'projects/:id', component: ProjectPageComponent},
   {path: 'add', component: ProjectTodoComponent}

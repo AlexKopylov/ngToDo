@@ -1,1 +1,73 @@
-<p>project-page works!</p>
+<div style="width: 400px; margin: auto;">
+  <div
+    *ngIf="currentTodo"
+    class="edit-form"
+  >
+    <h4>Todo</h4>
+    <form>
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          [(ngModel)]="currentTodo.title"
+          name="title"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          [(ngModel)]="currentTodo.description"
+          name="description"
+        >
+      </div>
+
+      <div class="farm-group">
+        <label><strong>Status:</strong></label>
+        {{currentTodo.published ? 'published' : 'Pending'}}
+      </div>
+    </form>
+
+    <button
+      class="badge badge-primary mr-2"
+      *ngIf="currentTodo.published"
+      (click)="updatePublished(false)"
+    >
+      UnPublish
+    </button>
+
+    <button
+      *ngIf="!currentTodo.published"
+      class="badge badge-primary mr-2"
+      (click)="updatePublished(true)"
+    >
+      Publish
+    </button>
+
+    <button
+      class="badge badge-primary mr-2"
+      (click)="deleteTodo()"
+    >
+      Delete
+    </button>
+
+    <button
+      type="submit"
+      class="badge badge-success"
+      (click)="updateTodos()"
+    >
+      Update
+    </button>
+    <p>{{message}}</p>
+  </div>
+
+  <div *ngIf="!currentTodo">
+    <br>
+    <p>Cannot access this Todo...</p>
+  </div>
+</div>
